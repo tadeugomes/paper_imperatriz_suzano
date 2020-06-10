@@ -1,6 +1,6 @@
 ############################# Scripts do Artigo sobre Mercado de Trabalho em Imperatriz
 
-# Instalar e carregar pacotes 
+# Carregar pacotes 
 library(sidrar)
 library(tidyverse)
 library(deflateBR)
