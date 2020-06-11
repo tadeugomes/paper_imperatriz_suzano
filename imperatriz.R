@@ -107,7 +107,7 @@ pibset$Variável<-pibset$Variável%>%
              
              Indústria = 'Valor adicionado bruto a preços correntes da indústria',  
              
-             Administração = 'Valor adicionado bruto a preços correntes da administração, defesa, educação e saúde públicas e seguridade social',  
+             Administracao = 'Valor adicionado bruto a preços correntes da administração, defesa, educação e saúde públicas e seguridade social',  
              
              Serviços = 'Valor adicionado bruto a preços correntes dos serviços, exclusive administração, defesa, educação e saúde públicas e seguridade social') 
 
@@ -116,25 +116,34 @@ ggplot(pibset, aes(x=times, y=real, colour = fct_reorder2(Variável, times, real
   geom_line(size=.8)+ 
   scale_y_continuous(labels = number_format(accuracy = 0.01, big.mark = ".", decimal.mark =","))+ 
   scale_x_date(expand = c(0, 2))+ 
-  labs(title = "Gráfico 2 - Valor adicionado bruto por setor da economia em Imperatriz", 
+  labs(title = "Gráfico 2 - Valor adicionado bruto por setor de atividade em Imperatriz", 
        y = "R$ Milhares", 
        x = "Ano",  
        colour = "Setor de Atividade",  
-       caption = "Fonte: IBGE. Deflator: IPCA")
+       caption = "Fonte: IBGE. Deflator: IPCA")+
+  theme_minimal()+ 
+  
+  theme(axis.title = element_text(size=12))+ 
+  
+  theme(axis.title = element_text(size=9, face = "bold"))+ 
+  
+  theme(axis.text.x = element_text(size=10, face = "bold.italic"))+ 
+  
+  theme(plot.title=element_text(face="bold", size=13))
 
 
-
-
-#Calcular taxa de crescimento anual composta do PIB 
-# resultado = ((valor final/valor inicial) ^ (1/n - anos)*100
-#((7065793/3373525)^(1/10) - 1)*100
 
 #Identificar a variacao com dataframe menor
 evopib<-evopib %>% 
   mutate(variacao = (real/lag(real, 1, order_by = Ano) - 1)*100)
 
+#Calcular taxa de crescimento anual composta do PIB 
+# resultado = ((valor final/valor inicial) ^ (1/n - anos)*100
+((6683377/3373548)^(1/10) - 1)*100
+
+
 #Percentual de crescimento. Calculo manual
-(7065793-3373525)/3373525*100
+(6683377-3373548)/3373548*100
 
 
 # Variacao do Valor adicionado por setor para analise e descricao 
@@ -203,10 +212,16 @@ po$times<-seq(from = as.Date('2006-01-01'), to = as.Date('2017-01-01'), by='year
 
 
 ggplot(po, aes(x=times, y=Valor))+
-  geom_line(size=.8)+
-  labs(title = "Número de pessoas assalariadas ocupadas (2006-2017)",
+  geom_line(size=.8, color='#8DA0CB')+
+  labs(title = "Número de vínculos formais de emprego em Imperatriz (2006-2017)",
        y = "Em mil", x = "Ano", caption = "Cadastro Central de Empresas/IBGE")+
-  geom_text(aes(label =Valor))
+  geom_text(aes(label = Valor))+
+  theme_minimal()+
+  theme(panel.grid.major.y = element_line(linetype = "dashed"))+
+  theme(axis.title = element_text(size=12))+
+  theme(axis.title = element_text(size=9, face = "bold"))+
+  theme(axis.text.x = element_text(size=10))+
+  theme(plot.title=element_text(face="bold", size=13))
 
 #numero de empresas por setor
 
@@ -255,13 +270,13 @@ rais2014$`CNPJ / CEI`
 
 
 suzano2017<-rais2017 %>% 
-  select(`Razão Social`, `Qtd V?nculos Ativos`, UF) %>% 
-  filter(`Razão Social` =="SUZANO PAP E CELULOSE S A" | `Raz?o Social` =="SUZANO PAP E CELULOSE SA") %>% 
+  select(`Razão Social`, `Qtd Vínculos Ativos`, UF) %>% 
+  filter(`Razão Social` =="SUZANO PAP E CELULOSE S A" | `Razão Social` =="SUZANO PAP E CELULOSE SA") %>% 
   group_by(UF) %>% 
   summarise(soma_valor = sum(`Qtd Vínculos Ativos`))
 
 suzano2016<-rais2016%>% 
-  select(`Razão Social`, `Qtd V?nculos Ativos`, UF) %>% 
+  select(`Razão Social`, `Qtd Vínculos Ativos`, UF) %>% 
   filter(`Razão Social` =="SUZANO PAP E CELULOSE S A" | `Raz?o Social` =="SUZANO PAP E CELULOSE SA") %>% 
   group_by(UF) %>% 
   summarise(soma_valor = sum(`Qtd Vínculos Ativos`))
@@ -335,7 +350,7 @@ ggplot(df, aes(x=ano, y=valor))+
   geom_bar(stat = 'identity', fill = "#8DA0CB")+
   geom_text(aes(label=valor, vjust = 0))+
   labs(x=" ", y="US$ Milhares de milhares", title="Gráfico 3 - Valor das exportações de Imperatriz", 
-       caption = "Fonte: Secex/Minist?rio da Indústria, Com?rcio Exterior e Serviços. Elaboração própria")+
+       caption = "Fonte: Secex/Ministério da Indústria, Comércio Exterior e Serviços. Elaboração própria")+
 theme(axis.title = element_text(size=10, face = "bold"))+
   theme(axis.text.x = element_text(size=8, face = "bold"))+
   theme(plot.title=element_text(face="bold", size=13))+
