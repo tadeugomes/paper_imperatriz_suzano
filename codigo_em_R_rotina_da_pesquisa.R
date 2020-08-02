@@ -495,3 +495,32 @@ ggplot(datacorr, aes(x=Pib, y=Empregos))+
   theme(plot.title=element_text(face="bold", size=13))+
   theme_minimal()
 
+
+
+#Criar dataframe com empregos identificados da Suzano 
+
+ano<-seq(2011, 2017)
+
+dados<- c(217, 423, 906, 1073, 1004, 1010, 1128) 
+
+emprecriado<-data.frame(ano, dados)
+
+
+ggplot(emprecriado, aes(x=ano, y=dados))+ 
+  
+  geom_bar(stat = 'identity', fill = "#BFC0C4")+ 
+  
+  geom_text(aes(label=dados, vjust = 0))+ 
+  
+  labs(x=" ", y=" Nº empregos", title=" ",  
+       
+       caption = " ")+
+  theme_bw()+
+  theme_gray()+
+  theme(axis.title = element_text(size=10, face = "bold"))+
+  theme(axis.text.x = element_text(size=8, face = "bold"))+
+  theme(plot.title=element_text(face="bold", size=13))+
+  theme_minimal()
+
+
+
