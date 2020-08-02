@@ -56,19 +56,18 @@ ggplot(evopib, aes(x=times))+
                                             
                                             decimal.mark =","))+ 
   
-  labs(title = "Gráfico 1 - Evolução do Produto Interno Bruto de Imperatriz (2006-2017)", 
+  labs(title = "", 
        
        y = "R$ Milhares", 
        
-       x = "Ano",  
+       x = " ",  
        
-       colour = "PIB",  
+       colour = "PIB",
        
-       caption = "Fonte: Sistema de Contas Nacionais Municipais/IBGE. 
-
-       Deflator do PIB: IPCA. Elaboração própria.")+ 
+       caption = "")+ 
   
-  theme_minimal()+ 
+  theme_grey()+
+  theme_bw()+
   
   theme(axis.title = element_text(size=12))+ 
   
@@ -116,13 +115,13 @@ ggplot(pibset, aes(x=times, y=real, colour = fct_reorder2(Variável, times, real
   geom_line(size=.8)+ 
   scale_y_continuous(labels = number_format(accuracy = 0.01, big.mark = ".", decimal.mark =","))+ 
   scale_x_date(expand = c(0, 2))+ 
-  labs(title = "Gráfico 2 - Valor adicionado bruto por setor de atividade em Imperatriz", 
+  labs(title = " ", 
        y = "R$ Milhares", 
-       x = "Ano",  
+       x = " ",  
        colour = "Setor de Atividade",  
-       caption = "Fonte: IBGE. Deflator: IPCA")+
-  theme_minimal()+ 
-  
+       caption = " ")+
+  theme_grey()+
+  theme_bw()+  
   theme(axis.title = element_text(size=12))+ 
   
   theme(axis.title = element_text(size=9, face = "bold"))+ 
@@ -189,14 +188,15 @@ empresas<-empresas %>%
 numero<-empresas %>% 
   filter(Variável == 'Número de empresas e outras organizações' & cnae=='Total')
 
-numero$times<-seq(from = as.Date('2006-01-01'), to = as.Date('2017-01-01'), by='year')
+#numero$times<-seq(from = as.Date('2006-01-01'), to = as.Date('2017-01-01'), by='year')
 
 ggplot(numero, aes(x=Ano, y=Valor, group=1))+
-  geom_line(size=.8, color='#8DA0CB')+
-  labs(title = "Gráfico 4 - Evolução do número de empresas em Imperatriz (2006-2017)",
-       y = "Estabelecimentos", x = " ", caption = "Fonte: Cadastro Central de Empresas/IBGE. Elaboração própria")+
+  geom_line(size=.8, color='gray')+
+  labs(title = " ",
+       y = "Estabelecimentos", x = " ", caption = "")+
   geom_text(aes(label =Valor))+
-  theme_minimal()+
+  theme_grey()+
+  theme_bw()+
   theme(panel.grid.major.y = element_line(linetype = "dashed"))+
   theme(axis.title = element_text(size=12))+
   theme(axis.title = element_text(size=9, face = "bold"))+
@@ -208,20 +208,22 @@ ggplot(numero, aes(x=Ano, y=Valor, group=1))+
 po<-empresas %>% 
   filter(Variável == 'Pessoal ocupado assalariado' & cnae == 'Total')
 
-po$times<-seq(from = as.Date('2006-01-01'), to = as.Date('2017-01-01'), by='year')
+po$times<-seq(from = as.Date('2006-01-01'), to = as.Date('2018-01-01'), by='year')
 
 
 ggplot(po, aes(x=times, y=Valor))+
-  geom_line(size=.8, color='#8DA0CB')+
-  labs(title = "Número de vínculos formais de emprego em Imperatriz (2006-2017)",
-       y = "Em mil", x = "Ano", caption = "Cadastro Central de Empresas/IBGE")+
-  geom_text(aes(label = Valor))+
-  theme_minimal()+
+  geom_line(size=.8, color="#BFC0C4")+
+  labs(title = " ",
+       y = "Em mil", x = " ", caption = "")+
+  geom_text(aes(label = Valor), size=3)+
+  theme_gray()+
+  theme_bw()+
   theme(panel.grid.major.y = element_line(linetype = "dashed"))+
   theme(axis.title = element_text(size=12))+
   theme(axis.title = element_text(size=9, face = "bold"))+
   theme(axis.text.x = element_text(size=10))+
-  theme(plot.title=element_text(face="bold", size=13))
+  theme(plot.title=element_text(face="bold", size=13))+
+  scale_x_date(date_breaks = "1 year", date_labels = "%Y")
 
 #numero de empresas por setor
 
@@ -235,7 +237,6 @@ setores2<- setores %>%
   filter(Variável =='Número de empresas e outras organizações')# %>% 
   #top_n(20)
   
-
 
 # Trabalhar com a RAIS. Fizemos uso da RAIS identificada, então os dados sao de acesso controlado
 
@@ -286,7 +287,7 @@ suzano2016<-rais2016%>%
 
 # Dados gerais da RAIS 
 
-rsetor<-fread('raisnovo.csv', dec = ',')
+rsetor<-fread('rais_imperatriz.csv', dec = ',')
 
 
 names(rsetor)<-c("Ano", "Extrativa Mineral", "Ind. Transformação", "Utilidade Publica", "Construção", "Comércio", "Servicos", "Adm. Pública", "Agropecuária, Pesca e Extrativismo", "total")
@@ -296,18 +297,18 @@ rsetor_piv<-pivot_longer(rsetor, cols = c(c("Extrativa Mineral", "Ind. Transform
 
 # Numeros da RAIS 
 ggplot(rsetor_piv, aes(x=Ano, y=total))+
-  geom_line(size=.8, colour = '#8DA0CB')+
-  geom_point()+
-  geom_text(aes(label=total, vjust = 1))+
+  geom_line(size=.8, colour = "#BFC0C4")+
+  geom_text(aes(label=total, vjust = 1), size =3)+
   scale_y_continuous(breaks = seq(0, 59000, by=4000), labels = number_format(big.mark ='.'))+
   scale_x_continuous(limits =c(2006,2017),
                      breaks = c(2006, 2008, 2010, 2012, 2014, 2016))+
-  labs(title = "Gráfico 5 - Distribuição dos vínculos formais de emprego (2006-2017)",
+  labs(title = " ",
        y = "Em mil",
        x = "", 
-       colour = "Setor de Atividade", 
-       caption = "Fonte: RAIS/MTr. Elaboração própria.")+
-  theme_minimal()+
+         colour = "Setor de Atividade", 
+       caption = " ")+
+  theme_gray()+
+  theme_bw()+
   theme(panel.grid.major.y = element_line(linetype = "dashed"))+
   theme(axis.title = element_text(size=12))+
   theme(axis.title = element_text(size=9, face = "bold"))+
@@ -347,10 +348,12 @@ df<-data.frame(ano, valor)
 
 df
 ggplot(df, aes(x=ano, y=valor))+
-  geom_bar(stat = 'identity', fill = "#8DA0CB")+
+  geom_bar(stat = 'identity', fill = "#BFC0C4")+
   geom_text(aes(label=valor, vjust = 0))+
-  labs(x=" ", y="US$ Milhares de milhares", title="Gráfico 3 - Valor das exportações de Imperatriz", 
-       caption = "Fonte: Secex/Ministério da Indústria, Comércio Exterior e Serviços. Elaboração própria")+
+  labs(x=" ", y="US$ Milhares", title=" ", 
+       caption = "")+
+  theme_bw()+
+  theme_gray()+
 theme(axis.title = element_text(size=10, face = "bold"))+
   theme(axis.text.x = element_text(size=8, face = "bold"))+
   theme(plot.title=element_text(face="bold", size=13))+
@@ -368,9 +371,10 @@ raiscorr<-rsetor %>%
   select(total)
 
 
-emprescorr<-head((empresas1),11)
+emprescorr<-head((empresas),11)
+
 emprescorr<-emprescorr %>% 
-  select(valor)
+  select(Valor)
 
 datacorr<-data.frame(c(raiscorr, emprescorr))
 
@@ -382,17 +386,14 @@ correlacao<-round(cor(datacorr),2)
 
 ggcorrplot(correlacao, hc.order = TRUE, type = "lower",
            lab = TRUE, method = "circle")+
-labs(title = "Gráfico 7  - Correlação entre emprego formal, 
-         número de empresas e PIB em Imperatriz",
-       caption = "Elaboração própria")+
-scale_fill_gradient2(low = "blue", high = "red", mid = "white", 
+labs(title = "",
+       caption = "")+
+scale_fill_gradient2(low = "gray", high = "black", mid = "white", 
                      midpoint = 0, limit = c(-1,1), space = "Lab", 
                      name="Correlação de Person")
 
 
 
-
-  
 ?ggcorrplot
 
 library(reshape2)
@@ -476,16 +477,21 @@ ggheatmap +
 
 ###
 
-plot<-ggplot(datacorr, aes(x=Pib, y=Empregos))+
-  labs(title = "Gráfico 8 - Regressão Linear entre empregos e PIB em Imperatriz", 
-       x="Evoluçãodo PIB real", y="Empregos Formais", caption = "Elaboração própria")+
+ggplot(datacorr, aes(x=Pib, y=Empregos))+
+  labs(title = "", 
+       x="Evolução do PIB real", y="Empregos formais", caption = "")+
       geom_point(size=2, colour='black', alpha=0.5)+
-  geom_point(size=1, colour='green', alpha=0.2)+
+  geom_point(size=1, colour='gray', alpha=0.2)+
   geom_point(size=2, colour='black', alpha=0.5)+
-  geom_point(size=1, colour='green', alpha=0.2)+
+  geom_point(size=1, colour='gray', alpha=0.2)+
   scale_y_continuous(breaks = seq(0, 60000, by=10000), labels = number_format(big.mark ='.'))+
   scale_x_continuous(labels = number_format(big.mark ='.', decimal.mark = ','))+
-  geom_smooth(method = 'lm', colour='blue')+
-  theme_minimal()+
-  annotate("text", x = 7000000, y = 47000, label = "Nova tendência \nna crise?")
+  geom_smooth(method = 'lm', colour='black')+
+  annotate("text", x = 7000000, y = 47000, label = "Nova tendência \nna crise?")+
+  theme_bw()+
+  theme_gray()+
+  theme(axis.title = element_text(size=10, face = "bold"))+
+  theme(axis.text.x = element_text(size=8, face = "bold"))+
+  theme(plot.title=element_text(face="bold", size=13))+
+  theme_minimal()
 
